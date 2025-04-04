@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-"""Genera un fractal basado en la función exponencial en el plano complejo."""
+# Genera un fractal mediante la funcion exponencial 
 def exponential_map_fractal(xmin = -2, xmax = 2, ymin = -2 , ymax = 2, width = 800, height = 800, 
                             c = 5 + 2j, max_iter=200):
     # Crear la malla de valores complejos    
@@ -9,8 +9,7 @@ def exponential_map_fractal(xmin = -2, xmax = 2, ymin = -2 , ymax = 2, width = 8
     y = np.linspace(ymin, ymax, height)
     X, Y = np.meshgrid(x, y)
     Z = X + 1j * Y
-    
-    # Convertir a números complejos        
+
     # Inicializar la matriz de iteraciones
     iteration_counts = np.zeros(Z.shape, dtype=int)
     
@@ -28,9 +27,9 @@ def plot_map_exp():
     fractal = exponential_map_fractal()
     
     # Graficar el fractal
-    plt.imshow(fractal, extent=(-2, 2, -2, 2), cmap='hot', interpolation='bilinear')
+    plt.imshow(fractal, extent=(-2, 2, -2, 2), cmap='twilight', interpolation='bilinear')
     plt.colorbar(label='Número de iteraciones')
-    plt.title('Mapa exponencial')
+    plt.title('Fractal Exponencial zn+1 = exp(zn) + c')
     plt.xlabel('Re(z)')
     plt.ylabel('Im(z)')
     plt.show()
