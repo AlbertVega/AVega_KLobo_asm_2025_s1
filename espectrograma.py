@@ -1,6 +1,8 @@
 import numpy as np
 from scipy.signal import stft
 import matplotlib.pyplot as plt
+from scipy.io import wavfile
+
 
 def generate_spectrogram(signal, sample_rate, nperseg=1024):
     """
@@ -48,12 +50,33 @@ def generate_composite_tone(frequencies, duration, sample_rate=40960):
     signal = sum(np.sin(2 * np.pi * f * t) for f in frequencies)
     return signal / len(frequencies), sample_rate
 
+
+def read_wav_file(filepath):
+    """
+    Lee un archivo WAV y devuelve la señal y la frecuencia de muestreo.
+    Si es estéreo, se toma un solo canal.
+    """
+    sample_rate, data = wavfile.read(filepath)
+    
+    if data.ndim > 1:
+        data = data[:, 0]  # Toma el canal izquierdo si es estéreo
+
+    # Normaliza si es entero (por ejemplo, int16)
+    if np.issubdtype(data.dtype, np.integer):
+        data = data / np.iinfo(data.dtype).max
+
+    return data, sample_rate
+
 # Ejemplo de uso
 if __name__ == "__main__":
     # Generar un tono simple de 1 kHz (A4)
-    tone, sr = generate_tone(1000, 2)
-    generate_spectrogram(tone, sr)
+    #tone, sr = generate_tone(1000, 2)
+    #generate_spectrogram(tone, sr)
     
     # Generar un tono compuesto (sumando 440 Hz, 880 Hz, 1000 Hz y 10 Hz)
-    composite_tone, sr = generate_composite_tone([440, 880, 1000, 10], 2)
-    generate_spectrogram(composite_tone, sr)
+    #composite_tone, sr = generate_composite_tone([440, 880, 1000, 10], 2)
+    #generate_spectrogram(composite_tone, sr)
+
+    # Desde archivo WAV
+    wav_signal, wav_sr = read_wav_file("VOLTAGE.wav") 
+    generate_spectrogram(wav_signal, wav_sr)
