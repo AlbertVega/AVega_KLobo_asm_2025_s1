@@ -2,26 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def generate_sine_signal():
-    t = np.linspace(0, 1, 500)  # 500 puntos en el intervalo de 1 segundo
-    signal = np.sin(10 * np.pi * 400 * t)  # Seno de alta frecuencia
+    t = np.linspace(0, 1, 500)  
+    signal = np.sin(10 * np.pi * 400 * t)  
     return signal
 
 def exponential_map_fractal(signal, xmin=-2, xmax=2, ymin=-2, ymax=2, width=800, height=800, max_iter=200):
-    # 1. Calcular la FFT para obtener la frecuencia dominante
+    # Manejo de la señal
     fft = np.fft.rfft(signal)
     frequencies = np.fft.rfftfreq(len(signal), 1/500)
     magnitude = np.abs(fft)
     
-    # Frecuencia dominante
-    frequency_component = frequencies[np.argmax(magnitude)]
+    frequency_component = frequencies[np.argmax(magnitude)] # Obtiene la frecuencia
     
-    # 2. Calcular la amplitud
-    amplitude = np.max(signal) - np.min(signal)
+    amplitude = np.max(signal) - np.min(signal) # Obtiene la amplitud
     
-    # 3. Obtener la fase del componente dominante
-    phase = np.angle(fft[np.argmax(magnitude)])
+    phase = np.angle(fft[np.argmax(magnitude)]) # Obtiene la fase
     
-    # Usar la fórmula especificada para definir la constante c
+    # Definir la constante c
     c = frequency_component / 100 + amplitude * np.exp(1j * phase)
     
     # Crear la malla de valores complejos
@@ -34,11 +31,12 @@ def exponential_map_fractal(signal, xmin=-2, xmax=2, ymin=-2, ymax=2, width=800,
     iteration_counts = np.zeros(Z.shape, dtype=int)
     
     # Iterar la función hasta alcanzar el límite o la divergencia
-    for i in range(max_iter): 
-        Z = np.exp(Z) + c 
-        # Se aplica la función exponencial y se suma la constante c
-        mask = np.abs(Z) < 1e10
-        iteration_counts += mask # Contar iteraciones con puntos no divergentes
+    for i in range(max_iter):
+        with np.errstate(over='ignore', invalid='ignore'): 
+            Z = np.exp(Z) + c 
+            # Se aplica la función exponencial y se suma la constante c
+            mask = np.abs(Z) < 1e10
+            iteration_counts += mask # Contar iteraciones con puntos no divergentes
 
     return iteration_counts, c
 
@@ -55,7 +53,6 @@ def plot_map_exp(signal):
     plt.ylabel('Im(z)')
     plt.show()
 
-# Ejecutar el código
 if __name__ == "__main__":
-    signal = generate_sine_signal()
-    plot_map_exp(signal)
+    signal = generate_sine_signal() # Funcion seno
+    plot_map_exp(signal) # Grafica los puntos
