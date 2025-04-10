@@ -11,7 +11,7 @@ def generate_spectrogram(signal, sample_rate, nperseg=1024):
     Parámetros:
         signal (array): Señal de entrada en el dominio del tiempo.
         sample_rate (int): Frecuencia de muestreo (Hz).
-        nperseg (int): Tamaño de la ventana para la STFT (por defecto: 256).
+        nperseg (int): Tamaño de la ventana para la STFT (por defecto: 1024).
     """
     # Calcula la STFT (retorna frecuencias, tiempos y Zxx = espectrograma complejo)
     f, t, Zxx = stft(signal, fs=sample_rate, nperseg=nperseg, window='hann', return_onesided=False)
@@ -66,17 +66,3 @@ def read_wav_file(filepath):
         data = data / np.iinfo(data.dtype).max
 
     return data, sample_rate
-
-# Ejemplo de uso
-if __name__ == "__main__":
-    # Generar un tono simple de 1 kHz (A4)
-    #tone, sr = generate_tone(1000, 2)
-    #generate_spectrogram(tone, sr)
-    
-    # Generar un tono compuesto (sumando 440 Hz, 880 Hz, 1000 Hz y 10 Hz)
-    #composite_tone, sr = generate_composite_tone([440, 880, 1000, 10], 2)
-    #generate_spectrogram(composite_tone, sr)
-
-    # Desde archivo WAV
-    wav_signal, wav_sr = read_wav_file("VOLTAGE.wav") 
-    generate_spectrogram(wav_signal, wav_sr)

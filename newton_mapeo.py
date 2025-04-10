@@ -1,8 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.io import wavfile
 
-def newton_fractal_with_signal(signal, width=800, height=800, max_iter=30, tol=1e-6):
+def newton_map(signal, width=800, height=800, max_iter=30, tol=1e-6):
     signal = np.asarray(signal)
     
     # verificar que la señal tenga al menos algunos valores
@@ -29,14 +28,9 @@ def newton_fractal_with_signal(signal, width=800, height=800, max_iter=30, tol=1
 
     return colors
 
-def plot_fractal_with_signal(signal):
-    fractal = newton_fractal_with_signal(signal)
+def plot_newton_map(signal):
+    fractal = newton_map(signal)
     plt.imshow(fractal, cmap='viridis', extent=(-2, 2, -2, 2))
     plt.colorbar()
     plt.title("Fractal de Newton modulado por señal")
     plt.show()
-
-t = np.linspace(0, 1, 800)
-signal = np.sin(2 * np.pi * 5 * t)  # Seno de 5 Hz
-
-plot_fractal_with_signal(signal)
